@@ -34,7 +34,7 @@ The main objective is to build a Machine Learning model that predicts whether a 
 9. Model Training
 10. Model Evaluation
 
-## Result
+## Result 
 
 The model predicts whether a customer is likely to subscribe to a bank term deposit.
 
