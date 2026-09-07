@@ -40,4 +40,4 @@ The model predicts whether a customer is likely to subscribe to a bank term depo
 
 ## Author
 
-Dhanraj Lokhande
+Dhanaraj Lokhande
