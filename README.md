@@ -1,6 +1,6 @@
 # Bank Marketing Prediction using Machine Learning 
 
-## Project Overview   
+## Project Overview    
  
 This project predicts whether a bank customer will subscribe to a term deposit based on customer information and previous marketing campaign data.
 
