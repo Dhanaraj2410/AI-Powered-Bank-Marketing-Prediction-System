@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Model Performance & Comparison - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold"><i class="fas fa-sliders-h text-info me-2"></i>Model Performance & Comparison</h1>
+    <p class="text-muted lead">Evaluation metrics computed from trained Scikit-learn models on test partition</p>
+  </div>
+
+  <!-- Active Model Metric Cards -->
+  {% if active_model %}
+    <div class="row g-3 mb-5">
+      <div class="col-md-2 col-6">
+        <div class="card-custom p-3 text-center border-start border-4 border-info">
+          <div class="kpi-title">ACCURACY</div>
+          <div class="kpi-value text-info">{% widthratio active_model.accuracy 1 100 %}%</div>
+        </div>
+      </div>
+      <div class="col-md-2 col-6">
+        <div class="card-custom p-3 text-center border-start border-4 border-success">
+          <div class="kpi-title">PRECISION</div>
+          <div class="kpi-value text-success">{% widthratio active_model.precision 1 100 %}%</div>
+        </div>
+      </div>
+      <div class="col-md-2 col-6">
+        <div class="card-custom p-3 text-center border-start border-4 border-warning">
+          <div class="kpi-title">RECALL</div>
+          <div class="kpi-value text-warning">{% widthratio active_model.recall 1 100 %}%</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-custom p-3 text-center border-start border-4 border-primary">
+          <div class="kpi-title">F1 SCORE</div>
+          <div class="kpi-value text-primary">{% widthratio active_model.f1_score 1 100 %}%</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <div class="card-custom p-3 text-center border-start border-4 border-secondary">
+          <div class="kpi-title">ROC - AUC</div>
+          <div class="kpi-value text-white">{% widthratio active_model.roc_auc 1 100 %}%</div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Model Comparison Table -->
+  <div class="card-custom p-4 mb-5">
+    <h4 class="fw-bold text-white mb-3"><i class="fas fa-table text-info me-2"></i>Model Benchmarking & Comparison</h4>
+    <p class="text-muted small mb-4">Comparing Logistic Regression against Decision Tree and Random Forest classifiers.</p>
+
+    <div class="table-responsive">
+      <table class="table table-custom table-hover align-middle text-center">
+        <thead>
+          <tr>
+            <th class="text-start">Algorithm</th>
+            <th>Accuracy</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1 Score</th>
+            <th>ROC AUC</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in models_info %}
+            <tr {% if m.is_active %}class="table-active border-info"{% endif %}>
+              <td class="text-start fw-bold">
+                <i class="fas fa-microchip me-2 {% if m.is_active %}text-info{% else %}text-muted{% endif %}"></i>
+                {{ m.algorithm }}
+              </td>
+              <td class="fw-bold text-info">{% widthratio m.accuracy 1 100 %}%</td>
+              <td>{% widthratio m.precision 1 100 %}%</td>
+              <td>{% widthratio m.recall 1 100 %}%</td>
+              <td>{% widthratio m.f1_score 1 100 %}%</td>
+              <td class="fw-bold text-warning">{% widthratio m.roc_auc 1 100 %}%</td>
+              <td>
+                {% if m.is_active %}
+                  <span class="badge bg-success">ACTIVE PRODUCTION</span>
+                {% else %}
+                  <span class="badge bg-secondary">BENCHMARK</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Visualizations Row: Confusion Matrix & ROC Curve -->
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card-custom p-4 h-100">
+        <h5 class="fw-bold text-white mb-3"><i class="fas fa-th-large text-info me-2"></i>Confusion Matrix (Active Model)</h5>
+        <p class="text-muted small mb-4">True Positive, True Negative, False Positive, False Negative counts.</p>
+
+        {% if active_model and active_model.confusion_matrix_json %}
+          <div class="row g-2 text-center my-auto">
+            <div class="col-6">
+              <div class="p-4 bg-dark rounded border border-success">
+                <small class="text-muted d-block">True Negative (TN)</small>
+                <div class="fs-2 fw-bold text-success">{{ active_model.confusion_matrix_json.0.0 }}</div>
+                <small class="text-muted">Correctly Predicted Refusals</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-4 bg-dark rounded border border-danger">
+                <small class="text-muted d-block">False Positive (FP)</small>
+                <div class="fs-2 fw-bold text-danger">{{ active_model.confusion_matrix_json.0.1 }}</div>
+                <small class="text-muted">Type I Error (False Alarm)</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-4 bg-dark rounded border border-warning">
+                <small class="text-muted d-block">False Negative (FN)</small>
+                <div class="fs-2 fw-bold text-warning">{{ active_model.confusion_matrix_json.1.0 }}</div>
+                <small class="text-muted">Type II Error (Missed Prospect)</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-4 bg-dark rounded border border-info">
+                <small class="text-muted d-block">True Positive (TP)</small>
+                <div class="fs-2 fw-bold text-info">{{ active_model.confusion_matrix_json.1.1 }}</div>
+                <small class="text-muted">Correctly Predicted Subscriptions</small>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card-custom p-4 h-100">
+        <h5 class="fw-bold text-white mb-3"><i class="fas fa-chart-line text-info me-2"></i>ROC Curve (Receiver Operating Characteristic)</h5>
+        <p class="text-muted small mb-3">Plotting True Positive Rate vs False Positive Rate across classification thresholds.</p>
+        <canvas id="chartRocCurve" height="230"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/model_charts.js' %}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    {% if active_model and active_model.roc_curve_json %}
+      const rocFpr = {{ active_model.roc_curve_json.fpr|safe }};
+      const rocTpr = {{ active_model.roc_curve_json.tpr|safe }};
+      initModelPerformanceCharts(rocFpr, rocTpr);
+    {% endif %}
+  });
+</script>
+{% endblock %}
