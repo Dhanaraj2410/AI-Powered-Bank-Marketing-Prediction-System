@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}BankPredict AI - AI-Powered Bank Marketing Prediction System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+  <div class="container">
+    <div class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill mb-3 border border-info border-opacity-25">
+      <i class="fas fa-microchip me-1"></i> Machine Learning Production System
+    </div>
+    <h1 class="hero-title mb-3">BankPredict AI</h1>
+    <p class="hero-subtitle mb-4">
+      Predict whether a bank customer will subscribe to a term deposit using advanced Machine Learning, real probability scoring, and explainable AI insights.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'predict' %}" class="btn btn-lg btn-primary-custom">
+        <i class="fas fa-magic me-2"></i> Start Prediction
+      </a>
+      <a href="{% url 'about' %}" class="btn btn-lg btn-outline-custom">
+        <i class="fas fa-compass me-2"></i> Explore Project
+      </a>
+      {% if not user.is_authenticated %}
+        <a href="{% url 'login' %}" class="btn btn-lg btn-secondary">
+          <i class="fas fa-sign-in-alt me-2"></i> Login
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Real Model Statistics Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-6">
+        <div class="card-custom p-4">
+          <div class="text-info fs-2 mb-2"><i class="fas fa-chart-pie"></i></div>
+          <div class="kpi-value">{{ total_predictions }}</div>
+          <div class="kpi-title">Total Predictions</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-custom p-4">
+          <div class="text-success fs-2 mb-2"><i class="fas fa-check-circle"></i></div>
+          <div class="kpi-value">{{ successful_predictions }}</div>
+          <div class="kpi-title">Yes Predictions</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-custom p-4">
+          <div class="text-warning fs-2 mb-2"><i class="fas fa-bullseye"></i></div>
+          <div class="kpi-value">{{ model_accuracy }}%</div>
+          <div class="kpi-title">Trained Model Accuracy</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card-custom p-4">
+          <div class="text-primary fs-2 mb-2"><i class="fas fa-users"></i></div>
+          <div class="kpi-value">{{ active_users }}</div>
+          <div class="kpi-title">Active Users</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Cards Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Enterprise AI Features</h2>
+      <p class="text-muted">Designed for banking professionals, data analysts, and marketing strategists.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card-custom p-4 h-100">
+          <div class="fs-1 text-info mb-3"><i class="fas fa-brain"></i></div>
+          <h5 class="fw-bold mb-2">Machine Learning Prediction</h5>
+          <p class="text-muted mb-0">Scikit-learn Pipeline with Logistic Regression predicting customer deposit subscription probability in real-time.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom p-4 h-100">
+          <div class="fs-1 text-warning mb-3"><i class="fas fa-lightbulb"></i></div>
+          <h5 class="fw-bold mb-2">Explainable AI (XAI)</h5>
+          <p class="text-muted mb-0">Clear feature contribution breakdown explaining exactly why the model arrived at its prediction.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom p-4 h-100">
+          <div class="fs-1 text-success mb-3"><i class="fas fa-file-csv"></i></div>
+          <h5 class="fw-bold mb-2">CSV Batch Prediction</h5>
+          <p class="text-muted mb-0">Upload multi-customer CSV files, process bulk predictions instantly, and download structured results.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom p-4 h-100">
+          <div class="fs-1 text-primary mb-3"><i class="fas fa-tachometer-alt"></i></div>
+          <h5 class="fw-bold mb-2">Secure Dashboard</h5>
+          <p class="text-muted mb-0">Interactive Chart.js visualizations tracking Monthly trends, Job distribution, and Probability ranges.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom p-4 h-100">
+          <div class="fs-1 text-secondary mb-3"><i class="fas fa-history"></i></div>
+          <h5 class="fw-bold mb-2">Prediction History</h5>
+          <p class="text-muted mb-0">Searchable, paginated prediction log stored safely in MySQL with role-based data isolation.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-custom p-4 h-100">
+          <div class="fs-1 text-danger mb-3"><i class="fas fa-sliders-h"></i></div>
+          <h5 class="fw-bold mb-2">Model Comparison</h5>
+          <p class="text-muted mb-0">Benchmark Logistic Regression against Decision Trees and Random Forests with ROC-AUC & Confusion Matrix graphs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

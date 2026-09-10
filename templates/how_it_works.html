@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}How It Works - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">How BankPredict AI Works</h1>
+    <p class="text-muted lead">From raw customer inputs to actionable AI marketing intelligence</p>
+  </div>
+
+  <div class="row align-items-center mb-5">
+    <div class="col-md-6 mb-4 mb-md-0">
+      <div class="card-custom p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: 700;">1</div>
+          <h5 class="fw-bold mb-0">Input Customer Information</h5>
+        </div>
+        <p class="text-muted mb-0">
+          Enter customer demographics (Age, Job, Education, Marital Status), credit/loan status, contact details, and current economic metrics via our validated single form or batch CSV upload.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4 mb-md-0">
+      <div class="card-custom p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: 700;">2</div>
+          <h5 class="fw-bold mb-0">Unified Scikit-Learn Pipeline Processing</h5>
+        </div>
+        <p class="text-muted mb-0">
+          The input data is fed directly into a serialized Scikit-learn <code class="text-info">ColumnTransformer</code> pipeline that standardizes continuous variables and applies one-hot encoding without any training/prediction mismatch.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4 mb-md-0">
+      <div class="card-custom p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: 700;">3</div>
+          <h5 class="fw-bold mb-0">ML Probability Scoring & XAI Breakdown</h5>
+        </div>
+        <p class="text-muted mb-0">
+          The Logistic Regression classifier predicts subscription probability (0% - 100%). Simultaneously, our Explainable AI (XAI) engine extracts coefficient weights to highlight key positive drivers and negative risk factors.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4 mb-md-0">
+      <div class="card-custom p-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: 700;">4</div>
+          <h5 class="fw-bold mb-0">MySQL Persistence & Analytics</h5>
+        </div>
+        <p class="text-muted mb-0">
+          Prediction results, probabilities, recommendations, and XAI explanations are safely persisted into MySQL, instantly updating your personal prediction history log and dashboard Chart.js analytics.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'predict' %}" class="btn btn-lg btn-primary-custom">
+      <i class="fas fa-play me-2"></i> Try Prediction Now
+    </a>
+  </div>
+</div>
+{% endblock %}

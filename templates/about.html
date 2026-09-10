@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}About Project - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">About BankPredict AI</h1>
+    <p class="text-muted lead">AI-Powered Term Deposit Marketing Prediction System</p>
+  </div>
+
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="card-custom p-4 h-100 border-start border-4 border-danger">
+        <h4 class="fw-bold text-danger mb-3"><i class="fas fa-exclamation-triangle me-2"></i> The Problem</h4>
+        <p class="text-muted">
+          Commercial banks conduct telemarketing campaigns to sell term deposits. However, contacting every customer indiscriminately leads to high telecommunication costs, agent fatigue, and customer dissatisfaction due to irrelevant sales calls.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card-custom p-4 h-100 border-start border-4 border-success">
+        <h4 class="fw-bold text-success mb-3"><i class="fas fa-lightbulb me-2"></i> The AI Solution</h4>
+        <p class="text-muted">
+          BankPredict AI utilizes Machine Learning algorithms trained on historical customer demographics, contact history, and economic indicators to score customer conversion probability, allowing marketing teams to target high-probability leads effectively.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="fw-bold text-center mb-4">Machine Learning Workflow</h3>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-info mb-2">Step 1</span>
+        <h6 class="fw-bold">Data Collection</h6>
+        <small class="text-muted">Bank Marketing dataset containing 41,188 customer records and 20 features.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-info mb-2">Step 2</span>
+        <h6 class="fw-bold">Data Understanding</h6>
+        <small class="text-muted">Exploratory Data Analysis checking dtypes, distributions, and feature correlations.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-info mb-2">Step 3</span>
+        <h6 class="fw-bold">Data Cleaning</h6>
+        <small class="text-muted">Handling nulls, stripping white-spaces, and deduplicating 1,784 redundant records.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-warning text-dark mb-2">Step 4</span>
+        <h6 class="fw-bold">Outlier Handling</h6>
+        <small class="text-muted">IQR Interquartile Range trimming on continuous columns (age, campaign, pdays, previous, cons.conf.idx).</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-warning text-dark mb-2">Step 5</span>
+        <h6 class="fw-bold">ColumnTransformer Encoding</h6>
+        <small class="text-muted">OneHotEncoding for categorical variables and StandardScaler for continuous variables.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-warning text-dark mb-2">Step 6</span>
+        <h6 class="fw-bold">Feature Selection & VIF</h6>
+        <small class="text-muted">Variance Inflation Factor analysis identifying multicollinearity across economic indicators.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-success mb-2">Step 7</span>
+        <h6 class="fw-bold">Train-Test Split</h6>
+        <small class="text-muted">Stratified 75% train / 25% test split preserving class ratios.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-success mb-2">Step 8</span>
+        <h6 class="fw-bold">Pipeline Model Training</h6>
+        <small class="text-muted">Scikit-learn Pipeline with Logistic Regression, Decision Trees, and Random Forests.</small>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-custom p-3">
+        <span class="badge bg-success mb-2">Step 9 & 10</span>
+        <h6 class="fw-bold">Evaluation & Django Web App</h6>
+        <small class="text-muted">Calculating Accuracy, ROC-AUC, and serving inference predictions via Django REST API.</small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}BankPredict AI - AI-Powered Bank Marketing Prediction System{% endblock %}</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+        <i class="fas fa-brain text-info fs-4"></i>
+        <span>BankPredict <span class="text-info">AI</span></span>
+        <span class="brand-badge">ML 2.0</span>
+      </a>
+      <button class="navbar-toggler text-white border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Project</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'how_it_works' %}">How It Works</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'model_performance' %}">Model Performance</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        
+        <div class="d-flex align-items-center gap-3">
+          {% if user.is_authenticated %}
+            <a href="{% url 'predict' %}" class="btn btn-sm btn-primary-custom">
+              <i class="fas fa-magic me-1"></i> Predict
+            </a>
+            <a href="{% url 'batch_predict' %}" class="btn btn-sm btn-outline-custom">
+              <i class="fas fa-file-csv me-1"></i> Batch CSV
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-secondary text-white">
+              <i class="fas fa-chart-line me-1"></i> Dashboard
+            </a>
+            {% if user.is_staff %}
+              <a href="{% url 'admin_dashboard' %}" class="btn btn-sm btn-warning text-dark font-weight-bold">
+                <i class="fas fa-shield-alt me-1"></i> Admin
+              </a>
+            {% endif %}
+            <div class="dropdown">
+              <button class="btn btn-sm btn-dark dropdown-toggle text-light" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-1"></i> {{ user.username }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="{% url 'history' %}"><i class="fas fa-history me-2"></i>History</a></li>
+                <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+              </ul>
+            </div>
+          {% else %}
+            <a href="{% url 'predict' %}" class="btn btn-sm btn-primary-custom me-2">Try Prediction</a>
+            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-custom me-2">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-sm btn-secondary">Register</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <div class="container mt-3">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show card-custom border-0" role="alert">
+          <i class="fas fa-info-circle me-2"></i> {{ message }}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container text-center">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-md-start mb-3 mb-md-0">
+          <div class="fw-bold text-white fs-5"><i class="fas fa-brain text-info me-2"></i>BankPredict AI</div>
+          <small class="text-muted">AI-Powered Bank Marketing Prediction System &bull; Production ML Application</small>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <small class="text-muted">&copy; 2026 BankPredict AI. Built with Django, MySQL & Scikit-learn.</small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

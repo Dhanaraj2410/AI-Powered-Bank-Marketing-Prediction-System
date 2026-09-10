@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+      <div class="card-custom p-4 p-md-5">
+        <div class="text-center mb-4">
+          <i class="fas fa-user-plus text-info fs-1 mb-2"></i>
+          <h2 class="fw-bold">Create Account</h2>
+          <p class="text-muted">Start predicting bank customer conversion with AI</p>
+        </div>
+
+        <form method="POST" action="{% url 'register' %}">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label text-muted">Username *</label>
+              <input type="text" name="username" class="form-control form-control-custom" placeholder="Choose username" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted">Email Address *</label>
+              <input type="email" name="email" class="form-control form-control-custom" placeholder="user@domain.com" required>
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label text-muted">Password *</label>
+              <input type="password" name="password" class="form-control form-control-custom" placeholder="Min 6 characters" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted">Confirm Password *</label>
+              <input type="password" name="confirm_password" class="form-control form-control-custom" placeholder="Re-enter password" required>
+            </div>
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label text-muted">Phone Number</label>
+              <input type="text" name="phone" class="form-control form-control-custom" placeholder="+1 555-0192">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted">Occupation / Job</label>
+              <input type="text" name="occupation" class="form-control form-control-custom" placeholder="e.g. Data Analyst">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary-custom w-100 py-2 fw-bold mb-3">
+            <i class="fas fa-check-circle me-2"></i> Create Account
+          </button>
+        </form>
+
+        <div class="text-center text-muted">
+          Already have an account? <a href="{% url 'login' %}" class="text-info text-decoration-none">Login here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
