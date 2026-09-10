@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Prediction Result - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      
+      <!-- Result Banner Card -->
+      <div class="card-custom p-4 p-md-5 mb-4 text-center">
+        <div class="mb-3">
+          {% if prediction.prediction_result == 'yes' %}
+            <div class="result-badge-yes mb-3">
+              <i class="fas fa-check-circle me-2"></i> LIKELY TO SUBSCRIBE
+            </div>
+          {% else %}
+            <div class="result-badge-no mb-3">
+              <i class="fas fa-times-circle me-2"></i> UNLIKELY TO SUBSCRIBE
+            </div>
+          {% endif %}
+        </div>
+
+        <h3 class="fw-bold mb-3">Prediction Probability: <span class="text-info">{{ prediction.probability }}%</span></h3>
+        
+        <!-- Progress Bar Gauge -->
+        <div class="progress progress-custom mb-3 mx-auto" style="max-width: 600px;">
+          <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{ prediction.probability }}%;">
+            {{ prediction.probability }}%
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mb-4">
+          <span class="badge bg-secondary px-3 py-2"><i class="fas fa-shield-alt me-1"></i> {{ prediction.confidence_level }}</span>
+          <span class="badge bg-info bg-opacity-20 text-info px-3 py-2 border border-info border-opacity-25"><i class="fas fa-bullseye me-1"></i> {{ prediction.risk_level }}</span>
+          <span class="badge bg-dark px-3 py-2"><i class="fas fa-robot me-1"></i> Model: {{ model_name }}</span>
+        </div>
+
+        <div class="alert alert-dark border-secondary text-start mx-auto mb-0" style="max-width: 700px;">
+          <h6 class="fw-bold text-info mb-2"><i class="fas fa-lightbulb me-2"></i> AI Recommendation & Strategy:</h6>
+          <p class="mb-0 text-light">{{ prediction.recommendation }}</p>
+        </div>
+      </div>
+
+      <!-- Explainable AI (XAI) Section -->
+      <div class="card-custom p-4 p-md-5 mb-4">
+        <h4 class="fw-bold text-white mb-2"><i class="fas fa-brain text-info me-2"></i>Why did the model make this prediction?</h4>
+        <p class="text-muted mb-4">Below are the primary factors contributing positively and negatively to the conversion probability.</p>
+
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card-custom p-3 bg-dark border-success border-opacity-25 h-100">
+              <h6 class="fw-bold text-success mb-3"><i class="fas fa-arrow-up me-2"></i> Top Favorable Drivers (+ Probability)</h6>
+              {% if xai_factors.positive %}
+                <ul class="list-group list-group-flush bg-transparent">
+                  {% for item in xai_factors.positive %}
+                    <li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between align-items-center px-0">
+                      <span><i class="fas fa-check text-success me-2"></i>{{ item.feature }}</span>
+                      <span class="badge bg-success bg-opacity-20 text-success border border-success">+{{ item.weight }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted small">No strong positive drivers recorded.</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-custom p-3 bg-dark border-danger border-opacity-25 h-100">
+              <h6 class="fw-bold text-danger mb-3"><i class="fas fa-arrow-down me-2"></i> Top Risk / Resisting Factors (- Probability)</h6>
+              {% if xai_factors.negative %}
+                <ul class="list-group list-group-flush bg-transparent">
+                  {% for item in xai_factors.negative %}
+                    <li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between align-items-center px-0">
+                      <span><i class="fas fa-times text-danger me-2"></i>{{ item.feature }}</span>
+                      <span class="badge bg-danger bg-opacity-20 text-danger border border-danger">{{ item.weight }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted small">No major resisting factors recorded.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback Section -->
+      <div class="card-custom p-4 text-center mb-4">
+        <h5 class="fw-bold mb-3">Was this prediction useful?</h5>
+        <div id="feedback-container" class="d-flex justify-content-center gap-3">
+          <button class="btn btn-feedback btn-outline-success" data-pred-id="{{ prediction.id }}" data-feedback="yes">
+            <i class="fas fa-thumbs-up me-2"></i> Yes, Useful
+          </button>
+          <button class="btn btn-feedback btn-outline-danger" data-pred-id="{{ prediction.id }}" data-feedback="no">
+            <i class="fas fa-thumbs-down me-2"></i> No, Needs Improvement
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'predict' %}" class="btn btn-outline-custom"><i class="fas fa-redo me-2"></i>New Prediction</a>
+        <a href="{% url 'history' %}" class="btn btn-primary-custom"><i class="fas fa-history me-2"></i>View Prediction History</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

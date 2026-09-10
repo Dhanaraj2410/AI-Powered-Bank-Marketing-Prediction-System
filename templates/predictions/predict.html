@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Prediction - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold"><i class="fas fa-magic text-info me-2"></i>Customer Term Deposit Prediction</h1>
+    <p class="text-muted lead">Enter customer attributes to compute term deposit conversion probability</p>
+  </div>
+
+  <form method="POST" action="{% url 'predict' %}">
+    {% csrf_token %}
+    <div class="row g-4">
+      
+      <!-- Section 1: Customer Demographics -->
+      <div class="col-md-6">
+        <div class="card-custom p-4 h-100">
+          <h5 class="fw-bold text-info mb-4"><i class="fas fa-user me-2"></i>Customer Information</h5>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-muted">Age (Years) *</label>
+              <input type="number" name="age" class="form-control form-control-custom" value="35" min="18" max="100" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label text-muted">Job / Occupation *</label>
+              <select name="job" class="form-select form-select-custom" required>
+                <option value="admin.">Admin</option>
+                <option value="blue-collar">Blue Collar</option>
+                <option value="technician">Technician</option>
+                <option value="services">Services</option>
+                <option value="management">Management</option>
+                <option value="retired">Retired</option>
+                <option value="entrepreneur">Entrepreneur</option>
+                <option value="self-employed">Self Employed</option>
+                <option value="housemaid">Housemaid</option>
+                <option value="unemployed">Unemployed</option>
+                <option value="student">Student</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-muted">Marital Status *</label>
+              <select name="marital" class="form-select form-select-custom" required>
+                <option value="married">Married</option>
+                <option value="single">Single</option>
+                <option value="divorced">Divorced</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label text-muted">Education Level *</label>
+              <select name="education" class="form-select form-select-custom" required>
+                <option value="university.degree">University Degree</option>
+                <option value="high.school">High School</option>
+                <option value="basic.9y">Basic 9y</option>
+                <option value="professional.course">Professional Course</option>
+                <option value="basic.4y">Basic 4y</option>
+                <option value="basic.6y">Basic 6y</option>
+                <option value="illiterate">Illiterate</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-4">
+              <label class="form-label text-muted">Credit Default</label>
+              <select name="default" class="form-select form-select-custom">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label class="form-label text-muted">Housing Loan</label>
+              <select name="housing" class="form-select form-select-custom">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label class="form-label text-muted">Personal Loan</label>
+              <select name="loan" class="form-select form-select-custom">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section 2: Campaign & Contact Attributes -->
+      <div class="col-md-6">
+        <div class="card-custom p-4 h-100">
+          <h5 class="fw-bold text-info mb-4"><i class="fas fa-phone-alt me-2"></i>Contact & Campaign Data</h5>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-muted">Contact Type *</label>
+              <select name="contact" class="form-select form-select-custom" required>
+                <option value="cellular">Cellular</option>
+                <option value="telephone">Telephone</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label text-muted">Last Contact Month</label>
+              <select name="month" class="form-select form-select-custom">
+                <option value="may">May</option>
+                <option value="jun">June</option>
+                <option value="jul">July</option>
+                <option value="aug">August</option>
+                <option value="sep">September</option>
+                <option value="oct">October</option>
+                <option value="nov">November</option>
+                <option value="dec">December</option>
+                <option value="mar">March</option>
+                <option value="apr">April</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-muted">Day of Week</label>
+              <select name="day_of_week" class="form-select form-select-custom">
+                <option value="mon">Monday</option>
+                <option value="tue">Tuesday</option>
+                <option value="wed">Wednesday</option>
+                <option value="thu">Thursday</option>
+                <option value="fri">Friday</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label text-muted">Contacts This Campaign</label>
+              <input type="number" name="campaign" class="form-control form-control-custom" value="1" min="1" max="50">
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-muted">Previous Contacts</label>
+              <input type="number" name="previous" class="form-control form-control-custom" value="0" min="0" max="10">
+            </div>
+            <div class="col-6">
+              <label class="form-label text-muted">Previous Outcome</label>
+              <select name="poutcome" class="form-select form-select-custom">
+                <option value="nonexistent">Non-existent</option>
+                <option value="failure">Failure</option>
+                <option value="success">Success</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section 3: Macro Economic Indicators -->
+      <div class="col-12">
+        <div class="card-custom p-4">
+          <h5 class="fw-bold text-info mb-4"><i class="fas fa-chart-line me-2"></i>Macro Economic & Financial Indicators</h5>
+          
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label text-muted">Employment Var Rate</label>
+              <input type="number" step="0.1" name="emp_var_rate" class="form-control form-control-custom" value="1.1">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-muted">Consumer Price Index</label>
+              <input type="number" step="0.001" name="cons_price_idx" class="form-control form-control-custom" value="93.994">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-muted">Consumer Confidence Index</label>
+              <input type="number" step="0.1" name="cons_conf_idx" class="form-control form-control-custom" value="-36.4">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted">Euribor 3 Month Rate</label>
+              <input type="number" step="0.001" name="euribor3m" class="form-control form-control-custom" value="4.857">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted">Number of Employees</label>
+              <input type="number" step="0.1" name="nr_employed" class="form-control form-control-custom" value="5191.0">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-lg btn-primary-custom px-5 py-3 fs-5">
+          <i class="fas fa-calculator me-2"></i> Predict Term Deposit Subscription
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>
+{% endblock %}
