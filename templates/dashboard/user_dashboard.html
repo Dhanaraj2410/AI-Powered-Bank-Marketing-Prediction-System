@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - BankPredict AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="fw-bold mb-1"><i class="fas fa-chart-line text-info me-2"></i>Analytics Dashboard</h1>
+      <p class="text-muted mb-0">Real-time prediction metrics and customer distribution insights</p>
+    </div>
+    <a href="{% url 'predict' %}" class="btn btn-primary-custom">
+      <i class="fas fa-plus me-2"></i> New Prediction
+    </a>
+  </div>
+
+  <!-- 5 KPI Cards -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-2 col-6">
+      <div class="card-custom p-3 kpi-card">
+        <div class="kpi-title">TOTAL PREDICTIONS</div>
+        <div class="kpi-value text-white">{{ total_predictions }}</div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card-custom p-3 kpi-card kpi-yes">
+        <div class="kpi-title">YES PREDICTIONS</div>
+        <div class="kpi-value text-success">{{ yes_predictions }}</div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card-custom p-3 kpi-card kpi-no">
+        <div class="kpi-title">NO PREDICTIONS</div>
+        <div class="kpi-value text-danger">{{ no_predictions }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card-custom p-3 kpi-card kpi-avg">
+        <div class="kpi-title">AVERAGE PROBABILITY</div>
+        <div class="kpi-value text-warning">{{ avg_probability }}%</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-12">
+      <div class="card-custom p-3 kpi-card kpi-acc">
+        <div class="kpi-title">MODEL ACCURACY</div>
+        <div class="kpi-value text-info">{{ model_accuracy }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6 col-lg-4">
+      <div class="card-custom p-4 h-100">
+        <h6 class="fw-bold text-white mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Yes vs No Ratio</h6>
+        <canvas id="chartYesNo" height="220"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card-custom p-4 h-100">
+        <h6 class="fw-bold text-white mb-3"><i class="fas fa-calendar-alt me-2 text-info"></i>Predictions by Month</h6>
+        <canvas id="chartMonth" height="220"></canvas>
+      </div>
+    </div>
+    <div class="col-md-12 col-lg-4">
+      <div class="card-custom p-4 h-100">
+        <h6 class="fw-bold text-white mb-3"><i class="fas fa-chart-area me-2 text-info"></i>Probability Distribution</h6>
+        <canvas id="chartProb" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card-custom p-4 h-100">
+        <h6 class="fw-bold text-white mb-3"><i class="fas fa-briefcase me-2 text-info"></i>Predictions by Job</h6>
+        <canvas id="chartJob" height="200"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card-custom p-4 h-100">
+        <h6 class="fw-bold text-white mb-3"><i class="fas fa-phone-alt me-2 text-info"></i>Predictions by Contact Type</h6>
+        <canvas id="chartContact" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Predictions Table -->
+  <div class="card-custom p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Recent Predictions</h5>
+      <a href="{% url 'history' %}" class="btn btn-sm btn-outline-custom">View All History</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-custom align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Job</th>
+            <th>Age</th>
+            <th>Contact</th>
+            <th>Result</th>
+            <th>Probability</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in recent_predictions %}
+            <tr>
+              <td>#{{ p.id }}</td>
+              <td>{{ p.customer.job|title }}</td>
+              <td>{{ p.customer.age }}</td>
+              <td>{{ p.customer.contact_type|title }}</td>
+              <td>
+                {% if p.prediction_result == 'yes' %}
+                  <span class="badge bg-success">YES</span>
+                {% else %}
+                  <span class="badge bg-danger">NO</span>
+                {% endif %}
+              </td>
+              <td class="fw-bold text-info">{{ p.probability }}%</td>
+              <td><small class="text-muted">{{ p.created_at|date:"M d, H:i" }}</small></td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-3">No predictions created yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dashboardData = {
+      yesNo: {{ yes_vs_no|safe }},
+      monthLabels: {{ month_labels|safe }},
+      monthData: {{ month_data|safe }},
+      probRanges: {{ prob_ranges|safe }},
+      jobLabels: {{ job_labels|safe }},
+      jobData: {{ job_data|safe }},
+      contactLabels: {{ contact_labels|safe }},
+      contactData: {{ contact_data|safe }}
+    };
+    initDashboardCharts(dashboardData);
+  });
+</script>
+{% endblock %}
