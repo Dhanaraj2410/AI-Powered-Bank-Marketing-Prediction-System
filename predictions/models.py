@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from customers.models import Customer
 
+# Comment 4: Prediction model stores individual customer subscription predictions, probabilities, and XAI factors.
+# Comment 5: Links prediction record to the evaluating User and targeted Customer entity in MySQL database.
 class Prediction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='predictions', null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='predictions')
@@ -20,6 +22,7 @@ class Prediction(models.Model):
     def __str__(self):
         return f"Prediction #{self.id}: {self.prediction_result.upper()} ({self.probability}%)"
 
+# Comment 6: BatchPrediction model logs CSV batch processing executions and aggregate success ratios.
 class BatchPrediction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='batch_predictions')
     file_name = models.CharField(max_length=255)
@@ -35,6 +38,7 @@ class BatchPrediction(models.Model):
     def __str__(self):
         return f"Batch #{self.id} ({self.file_name}) - {self.total_records} rows"
 
+# Comment 7: ModelInformation stores Logistic Regression model evaluation metadata (accuracy, ROC-AUC, precision/recall).
 class ModelInformation(models.Model):
     model_name = models.CharField(max_length=100)
     algorithm = models.CharField(max_length=100)

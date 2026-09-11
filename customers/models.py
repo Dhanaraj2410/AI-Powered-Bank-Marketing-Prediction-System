@@ -1,5 +1,7 @@
 from django.db import models
 
+# Comment 8: Customer model persists bank customer demographic, financial, and macroeconomic indicator features.
+# Comment 9: Stores inputs required for Scikit-Learn Logistic Regression term deposit subscription inference.
 class Customer(models.Model):
     age = models.IntegerField()
     job = models.CharField(max_length=50)
@@ -22,5 +24,6 @@ class Customer(models.Model):
     nr_employed = models.FloatField(default=5191.0)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Comment 10: Human readable summary of customer record for admin panel and dropdowns.
     def __str__(self):
         return f"Customer #{self.id} ({self.job}, {self.age}yo)"
