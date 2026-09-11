@@ -262,3 +262,15 @@ footer {
   color: var(--muted-text);
   padding: 2rem 0;
 }
+
+/* Print Utilities */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .navbar-custom, footer, .btn-primary-custom {
+    display: none !important;
+  }
+}
+
