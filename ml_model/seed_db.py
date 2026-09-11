@@ -10,8 +10,10 @@ if base_dir not in sys.path:
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bankpredict.settings')
 django.setup()
 
-from predictions.models import ModelInformation
+from predictions.models import ModelInformation, Prediction
+from customers.models import Customer
 from dataset_manager.models import DatasetInformation
+from django.contrib.auth.models import User
 
 def seed_database():
     meta_path = os.path.join(base_dir, 'model', 'model_comparison.json')
@@ -60,5 +62,38 @@ def seed_database():
         )
         print("Seeded DatasetInformation successfully.")
 
+    # Seed sample customer and prediction record for initial demo
+    admin_user = User.objects.filter(is_superuser=True).first()
+    sample_customer, created = Customer.objects.get_or_create(
+        job="technician",
+        age=38,
+        marital="single",
+        education="university.degree",
+        defaults={
+            "housing_loan": "yes",
+            "personal_loan": "no",
+            "contact_type": "cellular",
+            "month": "may",
+            "day_of_week": "mon",
+            "campaign": 1,
+            "pdays": 999,
+            "previous": 0,
+            "poutcome": "nonexistent"
+        }
+    )
+    if created:
+        Prediction.objects.create(
+            user=admin_user,
+            customer=sample_customer,
+            prediction_result="yes",
+            probability=82.5,
+            confidence_level="High Confidence",
+            risk_level="Low Risk Target",
+            recommendation="High priority customer! Recommend sending tailored term deposit offer.",
+            xai_factors_json={"euribor3m": 0.45, "emp.var.rate": 0.32, "poutcome": 0.28}
+        )
+        print("Seeded sample Customer & Prediction successfully.")
+
 if __name__ == "__main__":
     seed_database()
+
