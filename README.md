@@ -6,6 +6,39 @@ BankPredict AI is a production-grade machine learning web application built with
 
 ---
 
+## 🗄️ Database Architecture & MySQL Integration
+
+The system uses **MySQL 8** (via `pymysql` driver) with fallback support to SQLite.
+
+### MySQL `.env` Configuration
+```env
+DB_ENGINE=mysql
+DB_NAME=bankpredict_db
+DB_USER=root
+DB_PASSWORD=Dhanaraj2410
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+### Core Relational Schema
+
+```text
+       ┌──────────┐
+       │   USER   │ (auth_user)
+       └────┬─────┘
+            │ 1:1
+       ┌────┴─────┐
+       │ PROFILE  │ (accounts_userprofile)
+       └──────────┘
+            │ 1:N
+       ┌────┴─────┐ 1:N ┌──────────┐
+       │PREDICTION│─────│ CUSTOMER │ (customers_customer)
+       └──────────┘     └──────────┘
+```
+
+---
+
+
 ## 🌟 Key Features
 
 1. **Unified ML Pipeline (`ColumnTransformer`)**
