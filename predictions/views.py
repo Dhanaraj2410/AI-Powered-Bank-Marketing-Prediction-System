@@ -12,6 +12,8 @@ from .models import Prediction, BatchPrediction, ModelInformation
 from ml_model.predict import predict_single_customer, get_pipeline
 from ml_model.xai import get_explainable_factors
 
+# Comment 18: Handles single customer prediction requests submitted through the prediction web form.
+# Comment 19: Requires user authentication via @login_required decorator for security.
 @login_required
 def predict_view(request):
     if request.method == 'POST':
@@ -40,7 +42,7 @@ def predict_view(request):
 
             res = predict_single_customer(input_dict)
 
-            # Create Customer record in MySQL
+            # Comment 20: Persists new Customer details in MySQL database using Django ORM.
             c_data = res['customer_data']
             customer = Customer.objects.create(
                 age=int(c_data['age']),
@@ -58,6 +60,7 @@ def predict_view(request):
                 previous=int(c_data['previous']),
                 poutcome=c_data['poutcome'],
                 emp_var_rate=c_data['emp.var.rate'],
+
                 cons_price_idx=c_data['cons.price.idx'],
                 cons_conf_idx=c_data['cons.conf.idx'],
                 euribor3m=c_data['euribor3m'],
@@ -84,6 +87,7 @@ def predict_view(request):
 
     return render(request, 'predictions/predict.html')
 
+# Comment 21: Displays detailed single customer prediction result page with XAI breakdown.
 @login_required
 def prediction_result_view(request, prediction_id):
     prediction = get_object_or_404(Prediction, id=prediction_id)
@@ -102,8 +106,10 @@ def prediction_result_view(request, prediction_id):
     }
     return render(request, 'predictions/result.html', context)
 
+# Comment 22: Processes uploaded CSV files for batch automated predictions and logs metrics.
 @login_required
 def batch_predict_view(request):
+
     if request.method == 'POST' and request.FILES.get('csv_file'):
         csv_file = request.FILES['csv_file']
         if not csv_file.name.endswith('.csv'):

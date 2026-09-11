@@ -6,6 +6,7 @@ from .xai import get_explainable_factors
 
 _pipeline = None
 
+# Comment 13: Lazy-loads the trained Scikit-Learn Logistic Regression pipeline from disk (.pkl file).
 def get_pipeline():
     global _pipeline
     if _pipeline is None:
@@ -17,6 +18,7 @@ def get_pipeline():
             raise FileNotFoundError(f"Model pipeline not found at {model_path}. Please run train_model.py first.")
     return _pipeline
 
+# Comment 14: Cleans and validates incoming dictionary attributes, filling missing fields with dataset defaults.
 def sanitize_input(input_dict):
     """Ensure proper data types and default values for missing fields."""
     numeric_cols = {
@@ -58,6 +60,9 @@ def sanitize_input(input_dict):
 
     return clean_data
 
+# Comment 15: Computes probability scores using Logistic Regression predict_proba method.
+# Comment 16: Evaluates probability tiers (>=75%, >=50%, >=25%) to generate confidence levels and recommendations.
+# Comment 17: Extracts Explainable AI (XAI) feature contribution metrics for model interpretability.
 def predict_single_customer(input_dict):
     """
     Runs prediction for a single customer input dictionary.
