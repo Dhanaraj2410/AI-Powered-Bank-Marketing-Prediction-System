@@ -1,6 +1,8 @@
+from typing import Any
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -15,7 +17,11 @@ from .serializers import (
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def api_register(request):
+def api_register(request: Request) -> Response:
+    """
+    Registers a new user account given username, email, and password.
+    Returns 201 Created on success.
+    """
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
@@ -31,7 +37,10 @@ def api_register(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def api_login(request):
+def api_login(request: Request) -> Response:
+    """
+    Authenticates user credentials and starts a session.
+    """
     username = request.data.get('username')
     password = request.data.get('password')
 
@@ -42,7 +51,11 @@ def api_login(request):
     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
-def api_predict(request):
+def api_predict(request: Request) -> Response:
+    """
+    Receives JSON payload of customer attributes, runs Logistic Regression inference,
+    persists customer & prediction models to MySQL, and returns probabilities & XAI factors.
+    """
     serializer = PredictionInputSerializer(data=request.data)
     if serializer.is_valid():
         input_data = serializer.validated_data
@@ -96,7 +109,10 @@ def api_predict(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def api_predictions_list(request):
+def api_predictions_list(request: Request) -> Response:
+    """
+    Returns list of prediction history records for current user or all records for staff.
+    """
     if request.user.is_staff:
         queryset = Prediction.objects.all().select_related('customer')
     else:
@@ -106,7 +122,10 @@ def api_predictions_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def api_prediction_detail(request, prediction_id):
+def api_prediction_detail(request: Request, prediction_id: int) -> Response:
+    """
+    Returns detailed prediction object by primary key ID.
+    """
     try:
         if request.user.is_staff:
             pred = Prediction.objects.get(id=prediction_id)
@@ -117,7 +136,10 @@ def api_prediction_detail(request, prediction_id):
         return Response({'error': 'Prediction not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
-def api_prediction_feedback(request, prediction_id):
+def api_prediction_feedback(request: Request, prediction_id: int) -> Response:
+    """
+    Records user feedback ('yes' or 'no') for model evaluation tracking.
+    """
     try:
         pred = Prediction.objects.get(id=prediction_id)
         feedback_val = request.data.get('feedback')  # 'yes' or 'no'
@@ -130,7 +152,10 @@ def api_prediction_feedback(request, prediction_id):
         return Response({'error': 'Prediction not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def api_dashboard_stats(request):
+def api_dashboard_stats(request: Request) -> Response:
+    """
+    Returns aggregated dashboard KPI statistics (total, yes, no counts, avg prob).
+    """
     user_preds = Prediction.objects.filter(user=request.user) if not request.user.is_staff else Prediction.objects.all()
 
     total_predictions = user_preds.count()
@@ -151,7 +176,10 @@ def api_dashboard_stats(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def api_model_performance(request):
+def api_model_performance(request: Request) -> Response:
+    """
+    Returns accuracy, precision, recall, and ROC-AUC metrics across trained models.
+    """
     models_info = ModelInformation.objects.all()
     serializer = ModelInformationSerializer(models_info, many=True)
     return Response(serializer.data)
