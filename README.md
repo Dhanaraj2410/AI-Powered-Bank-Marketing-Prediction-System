@@ -1,4 +1,4 @@
-# BankPredict AI - AI-Powered Bank Marketing Prediction System  
+# BankPredict AI - AI-Powered Bank Marketing Prediction System   
 
 > **"The system not only predicts whether a customer will subscribe to a term deposit, but also provides prediction probability, model performance metrics, prediction history, dashboard analytics, and explainable insights."** 
 
