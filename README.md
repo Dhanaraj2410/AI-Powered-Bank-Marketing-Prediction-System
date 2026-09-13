@@ -14,8 +14,8 @@ The system uses **MySQL 8** (via `pymysql` driver) with fallback support to SQLi
 ```env
 DB_ENGINE=mysql
 DB_NAME=bankpredict_db
-DB_USER=root
-DB_PASSWORD=Dhanaraj2410
+DB_USER=-----
+DB_PASSWORD=-------
 DB_HOST=localhost
 DB_PORT=3306
 ```
