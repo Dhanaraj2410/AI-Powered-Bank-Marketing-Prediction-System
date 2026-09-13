@@ -20,7 +20,7 @@ DB_HOST=localhost
 DB_PORT=3306
 ```
 
-### Core Relational Schema
+### Core Relational Schema 
 
 ```text
        ┌──────────┐
