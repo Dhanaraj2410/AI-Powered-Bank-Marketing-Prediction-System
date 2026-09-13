@@ -2,6 +2,7 @@
 
 > **"The system not only predicts whether a customer will subscribe to a term deposit, but also provides prediction probability, model performance metrics, prediction history, dashboard analytics, and explainable insights."** 
 
+ 
 BankPredict AI is a production-grade machine learning web application built with **Python, Django, MySQL 8, Scikit-learn Pipeline (`ColumnTransformer`), Bootstrap 5, Chart.js, and Django REST Framework**.
 
 
