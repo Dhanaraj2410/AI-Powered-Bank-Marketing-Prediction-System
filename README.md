@@ -9,7 +9,7 @@ BankPredict AI is a production-grade machine learning web application built with
 
 ## 🗄️ Database Architecture & MySQL Integration
 
-The system uses **MySQL 8** (via `pymysql` driver) with fallback support to SQLite.
+The system uses **MySQL 8** (via `pymysql` driver) with fallback support to SQLite. 
 
 ### MySQL `.env` Configuration
 ```env
