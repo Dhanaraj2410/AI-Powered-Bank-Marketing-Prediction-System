@@ -6,7 +6,7 @@
 BankPredict AI is a production-grade machine learning web application built with **Python, Django, MySQL 8, Scikit-learn Pipeline (`ColumnTransformer`), Bootstrap 5, Chart.js, and Django REST Framework**.
 
 
-## 🗄️ Database Architecture & MySQL Integration
+## 🗄️ Database Architecture & MySQL Integration 
 
 The system uses **MySQL 8** (via `pymysql` driver) with fallback support to SQLite. 
 
